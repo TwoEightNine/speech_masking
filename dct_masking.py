@@ -1,27 +1,15 @@
 import numpy as np
+import masking_rules
 from scipy.fftpack import dct, idct
 
 
-def stub(amps: np.array) -> np.array:
-    return __dct_batching(amps, lambda x: x, 64)
-
-
-def mask(amps: np.array, batch_size=64, batch_offset=2) -> np.array:
-    def on_batch(spec: np.array) -> np.array:
-        if batch_offset > 0:
-            spec[:batch_size - batch_offset] = spec[batch_offset:]
-        return spec
-
+def mask(amps: np.array, batch_size=64, masking_rule: masking_rules.MaskingRule = None) -> np.array:
+    on_batch = lambda spec: masking_rule.mask(spec)
     return __dct_batching(amps, on_batch, batch_size)
 
 
-def unmask(amps: np.array, batch_size=64, batch_offset=2) -> np.array:
-    def on_batch(spec: np.array) -> np.array:
-        if batch_offset > 0:
-            spec[batch_offset:] = spec[:batch_size - batch_offset]
-            spec[:batch_offset] = 0
-        return spec
-
+def unmask(amps: np.array, batch_size=64, masking_rule: masking_rules.MaskingRule = None) -> np.array:
+    on_batch = lambda spec: masking_rule.unmask(spec)
     return __dct_batching(amps, on_batch, batch_size)
 
 

@@ -15,3 +15,13 @@ def cut_peaks(y, percentiles=None):
     y[y > per_end] = per_end
     y[y < per_start] = per_start
     return y.astype('int16')
+
+
+def smoothen_batch_borders(amps: np.array, batch_size, radius=10) -> np.array:
+    amps = np.array(amps)
+    for batch_i in range(amps.shape[0] // batch_size):
+        border = batch_size * (batch_i + 1)
+        frm = amps[border - radius - 1]
+        t = amps[border + radius + 1]
+        amps[border - radius:border + radius] = np.linspace(frm, t, radius * 2)
+    return amps

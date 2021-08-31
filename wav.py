@@ -9,5 +9,10 @@ def read_orig() -> np.array:
     return np.array(speech[1], dtype=float)
 
 
+def read(name: str) -> np.array:
+    speech = wavfile.read(file.get_new_file_path(name))
+    return np.array(speech[1], dtype=float)
+
+
 def save_result(name: str, amps: np.array):
     wavfile.write(file.get_new_file_path(name), 44100, amps)
