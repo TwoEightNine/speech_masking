@@ -1,0 +1,11 @@
+# Environments
+.env
+.venv
+venv/
+venv.bak/
+
+# Jupyter notebooks
+/.ipynb_checkpoints
+
+# IDE
+.idea
